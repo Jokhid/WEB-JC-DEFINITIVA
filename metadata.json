@@ -1,0 +1,8 @@
+{
+  "name": "Protección Financiera de Élite",
+  "description": "Asesoramiento financiero profesional, especializado en hipotecas, seguros de vida, salud y ahorro estratégico.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
