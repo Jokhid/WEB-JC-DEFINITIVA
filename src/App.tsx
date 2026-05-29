@@ -10,9 +10,10 @@ import {
   X,
   Phone,
   Mail,
-  ChevronDown
+  ChevronDown,
+  Settings
 } from "lucide-react";
-import { useState, useEffect, useRef, ReactNode } from "react";
+import { useState, useEffect, useRef, ReactNode, FormEvent } from "react";
 import Lenis from "lenis";
 
 // --- Smooth Scroll (Lenis) Hook & Setup ---
@@ -45,13 +46,14 @@ const useSmoothScroll = () => {
 // --- Premium Animation Helper Components ---
 
 // Real time text curtain reveal using CSS clip-path mask
-const CurtainText = ({ children, delay = 0, className = "inline-block" }: { children: ReactNode; delay?: number; className?: string }) => {
+const CurtainText = ({ children, delay = 0, className = "inline-block", immediate = false }: { children: ReactNode; delay?: number; className?: string; immediate?: boolean }) => {
   return (
     <span className={`relative overflow-hidden pb-1 -mb-1 block ${className}`}>
       <motion.span
         initial={{ y: "105%" }}
-        whileInView={{ y: 0 }}
-        viewport={{ once: true, margin: "-12% 0px" }}
+        animate={immediate ? { y: 0 } : undefined}
+        whileInView={immediate ? undefined : { y: 0 }}
+        viewport={immediate ? undefined : { once: true, margin: "0px" }}
         transition={{
           type: "spring",
           stiffness: 65,
@@ -266,10 +268,10 @@ const Hero = () => {
             <span className="text-brand-orange font-black uppercase tracking-[0.4em] text-[10px]">Asesoría de Élite</span>
           </div>
 
-          <h1 className="text-5xl md:text-[6.2rem] font-serif leading-[0.94] tracking-tighter mb-10 text-brand-dark">
-            <CurtainText delay={0.05}>Protege tus ingresos,</CurtainText>
-            <CurtainText delay={0.15}>
-              tu <span className="text-brand-orange italic font-light">vivienda</span> e hijos
+          <h1 className="text-5xl md:text-[5.8rem] font-serif leading-[0.98] tracking-tight mb-10 text-brand-dark">
+            <CurtainText delay={0.05} immediate={true} className="italic text-brand-dark font-light">Protege tus ingresos,</CurtainText>
+            <CurtainText delay={0.15} immediate={true}>
+              tu <span className="text-brand-orange italic font-light">vivienda</span> e hijos.
             </CurtainText>
           </h1>
           
@@ -425,10 +427,10 @@ const ProblemSection = () => {
 
           <div>
             <span className="text-brand-orange font-black uppercase tracking-[0.4em] text-[10px] mb-8 inline-block">El Desafío Actual</span>
-            <h2 className="text-5xl md:text-7xl font-serif text-brand-dark mb-10 leading-[1.08] tracking-tighter">
-              <CurtainText delay={0.05}>¿Sabes realmente qué pasaría</CurtainText>
+            <h2 className="text-5xl md:text-7xl font-serif text-brand-dark mb-10 leading-[1.08] tracking-tight">
+              <CurtainText delay={0.05} className="italic text-brand-dark font-light">¿Sabes realmente qué pasaría</CurtainText>
               <CurtainText delay={0.12}>
-                <span className="italic text-brand-orange font-light">si faltaras mañana?</span>
+                <span className="text-brand-orange font-normal">si faltaras mañana?</span>
               </CurtainText>
             </h2>
             <div className="space-y-12">
@@ -475,7 +477,7 @@ const MethodSection = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-24">
           <span className="text-brand-orange font-black uppercase tracking-[0.3em] text-[10.5px] mb-4 inline-block">Plan Metódico</span>
-          <h2 className="text-4xl md:text-6xl font-serif text-brand-dark mb-4 leading-tight">Primero diagnóstico. Después soluciones.</h2>
+          <h2 className="text-4xl md:text-6xl font-serif text-brand-dark mb-4 leading-tight italic font-light">Primero diagnóstico, <span className="text-brand-orange not-italic font-normal">después soluciones.</span></h2>
           <div className="w-24 h-1 bg-brand-orange mx-auto rounded-full"></div>
         </div>
         
@@ -555,9 +557,9 @@ const ServicesSection = () => {
           <div className="max-w-2xl">
             <span className="text-brand-orange font-black uppercase tracking-[0.3em] text-sm mb-6 inline-block">Nuestra Pericia</span>
             <h2 className="text-4xl md:text-7xl font-serif leading-[1.08] tracking-tight">
-              <CurtainText delay={0.05}>Servicios de</CurtainText>
+              <CurtainText delay={0.05} className="italic text-brand-dark font-light">Servicios de</CurtainText>
               <CurtainText delay={0.12}>
-                <span className="text-brand-orange italic">protección inteligente</span>
+                <span className="text-brand-orange font-normal">protección inteligente.</span>
               </CurtainText>
             </h2>
           </div>
@@ -629,8 +631,8 @@ const Audiences = () => {
           </div>
           <div>
             <span className="text-brand-orange font-bold text-lg mb-6 inline-block">Freelancers & Autónomos</span>
-            <h2 className="text-4xl md:text-[4.8rem] font-serif mb-8 leading-[1.08] tracking-tight italic">
-              Si eres autónomo, <br /><span className="text-brand-orange not-italic">tú eres el motor</span>
+            <h2 className="text-4xl md:text-[4.8rem] font-serif mb-8 leading-[1.08] tracking-tight italic font-light text-brand-dark">
+              Si eres autónomo, <br /><span className="text-brand-orange not-italic font-normal">tú eres el motor.</span>
             </h2>
             <p className="text-brand-gray text-xl mb-10 leading-relaxed font-light">
               Si el motor se para, se para todo. Mi trabajo es asegurarme de que el engranaje financiero y vital de tu negocio siga girando con absoluta precisión.
@@ -674,8 +676,8 @@ const Audiences = () => {
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
           <div>
             <span className="text-brand-blue font-bold text-lg mb-6 inline-block tracking-wide">Bienestar Familiar</span>
-            <h2 className="text-4xl md:text-[4.8rem] font-serif mb-8 text-brand-blue leading-[1.08] tracking-tight">
-              La familia es <br /><span className="text-brand-orange italic">tu primer legado</span>
+            <h2 className="text-4xl md:text-[4.8rem] font-serif mb-8 text-brand-blue leading-[1.08] tracking-tight italic font-light">
+              La familia es <br /><span className="text-brand-orange not-italic font-normal">tu primer legado.</span>
             </h2>
             <p className="text-brand-gray text-xl mb-10 leading-relaxed font-light max-w-lg">
               No se trata de miedo, se trata de amor y responsabilidad. Mi meta es que lo peor no rompa el estilo de vida de los que más quieres. Claridad, previsión y paz mental.
@@ -714,6 +716,75 @@ const Audiences = () => {
 };
 
 const DiagnosisForm = () => {
+  const [formData, setFormData] = useState({
+    nombre: "",
+    whatsapp: "",
+    preocupacion: "Diagnóstico Integral (Recomendado)",
+    mensaje: ""
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [configOpen, setConfigOpen] = useState(false);
+  const [sheetUrl, setSheetUrl] = useState(() => {
+    return localStorage.getItem("google_sheets_url") || "";
+  });
+  const [tempUrl, setTempUrl] = useState(sheetUrl);
+
+  const handleSaveConfig = (e: FormEvent) => {
+    e.preventDefault();
+    localStorage.setItem("google_sheets_url", tempUrl.trim());
+    setSheetUrl(tempUrl.trim());
+    setConfigOpen(false);
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!formData.nombre || !formData.whatsapp) {
+      setErrorMsg("Por favor, introduce tu nombre y un contacto de WhatsApp.");
+      return;
+    }
+    setErrorMsg("");
+    setSubmitting(true);
+
+    const payload = {
+      nombre: formData.nombre,
+      whatsapp: formData.whatsapp,
+      preocupacion: formData.preocupacion,
+      mensaje: formData.mensaje,
+      fecha: new Date().toLocaleString("es-ES")
+    };
+
+    if (sheetUrl) {
+      try {
+        await fetch(sheetUrl, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+        setSuccess(true);
+        setFormData({ nombre: "", whatsapp: "", preocupacion: "Diagnóstico Integral (Recomendado)", mensaje: "" });
+      } catch (err: any) {
+        setErrorMsg("Error de conexión. Revisa la configuración de tu webhook.");
+      } finally {
+        setSubmitting(false);
+      }
+    } else {
+      // Local recovery backup mode (simulation)
+      setTimeout(() => {
+        const localLeads = JSON.parse(localStorage.getItem("captured_leads") || "[]");
+        localLeads.push(payload);
+        localStorage.setItem("captured_leads", JSON.stringify(localLeads));
+        setSuccess(true);
+        setFormData({ nombre: "", whatsapp: "", preocupacion: "Diagnóstico Integral (Recomendado)", mensaje: "" });
+        setSubmitting(false);
+      }, 1000);
+    }
+  };
+
   return (
     <section id="diagnostico" className="py-40 bg-brand-dark relative overflow-hidden">
       {/* Subtle blurs (lights) */}
@@ -729,31 +800,59 @@ const DiagnosisForm = () => {
             transition={{ type: "spring", stiffness: 60, damping: 16 }}
           >
             <span className="text-brand-orange font-black uppercase tracking-[0.3em] text-[10px] mb-8 inline-block">Comienza el Cambio</span>
-            <h2 className="text-5xl md:text-8xl font-serif text-white mb-12 leading-[0.92] tracking-tighter">
-              Solicita tu <br /><span className="text-brand-orange italic font-light">diagnóstico</span>
+            <h2 className="text-5xl md:text-8xl font-serif text-white mb-12 leading-[0.92] tracking-tight italic font-light">
+              Solicita tu <br /><span className="text-brand-orange not-italic font-normal">diagnóstico.</span>
             </h2>
             <p className="text-gray-400 text-xl md:text-2xl mb-16 leading-relaxed font-light">
               Es una conversación de claridad. Detectaremos fugas en tu protección actual y trazaremos un plan táctico para blindar tu futuro.
             </p>
             
-            <div className="space-y-14">
-              <div className="flex items-center gap-8 group">
+            <div className="space-y-10">
+              <a href="https://wa.me/34647506040" target="_blank" rel="noopener noreferrer" className="flex items-center gap-8 group cursor-pointer">
                 <div className="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-brand-orange group-hover:bg-brand-orange group-hover:text-white transition-all duration-500 shadow-2xl">
                   <Phone size={32} />
                 </div>
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-2">WhatsApp Directo</p>
-                  <p className="text-white text-3xl font-light tracking-tight">+34 600 000 000</p>
+                  <p className="text-white text-3xl font-light tracking-tight group-hover:text-brand-orange transition-colors duration-300">+34 647 50 60 40</p>
                 </div>
-              </div>
-              <div className="flex items-center gap-8 group">
+              </a>
+              <a href="mailto:josecarlos@hilolegal.es" className="flex items-center gap-8 group cursor-pointer">
                 <div className="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-brand-orange group-hover:bg-brand-orange group-hover:text-white transition-all duration-500 shadow-2xl">
                   <Mail size={32} />
                 </div>
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-2">Email Profesional</p>
-                  <p className="text-white text-3xl font-light tracking-tight">hola@josecarloshidalgo.com</p>
+                  <p className="text-white text-3xl font-light tracking-tight group-hover:text-brand-orange transition-colors duration-300">josecarlos@hilolegal.es</p>
                 </div>
+              </a>
+            </div>
+
+            {/* Immersive Dark Google Map Section */}
+            <div className="mt-16 group">
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-4 flex items-center gap-3">
+                <span className="w-3 h-[1px] bg-gray-600 block"></span>
+                <span>Oficina Principal</span>
+              </p>
+              <div className="h-64 rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl relative bg-black/40">
+                <iframe
+                  title="Ubicación Hilolegal"
+                  src="https://maps.google.com/maps?q=Calle%20Regata%203%2C%201%C2%BA%20E%20Altea%2003590%20Alicante&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  className="w-full h-full border-0 grayscale invert opacity-60 contrast-125 saturate-50 hover:filter-none hover:opacity-100 transition-all duration-700"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
+                {/* Float address bar */}
+                <a 
+                  href="https://maps.google.com/?q=Calle+Regata+3,+1º+E,+Altea+03590,+Alicante"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute bottom-4 left-4 right-4 bg-black/80 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 flex items-center justify-between text-blue hover:border-brand-orange transition-all duration-300 text-[10px] font-black uppercase tracking-widest text-white/90"
+                >
+                  <span>Calle Regata 3, 1º E, Altea</span>
+                  <span className="text-brand-orange text-[9px]">Cómo llegar →</span>
+                </a>
               </div>
             </div>
           </motion.div>
@@ -765,51 +864,219 @@ const DiagnosisForm = () => {
             transition={{ type: "spring", stiffness: 50, damping: 16, delay: 0.15 }}
             className="bg-white p-10 md:p-20 rounded-[4rem] shadow-[0_45px_90px_rgba(0,0,0,0.3)] relative"
           >
-            <form className="space-y-10" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid md:grid-cols-2 gap-10">
-                <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-gray ml-2">Nombre Completo</label>
-                  <input type="text" placeholder="Ej. Juan Pérez" className="w-full bg-[#F5F5F7] border-0 rounded-2xl p-6 text-brand-dark focus:ring-2 focus:ring-brand-orange outline-none transition-all placeholder:text-gray-300 font-medium" />
+            {/* Configure Webhook Action - Subtle Gear Icon */}
+            <button 
+              onClick={() => { setTempUrl(sheetUrl); setConfigOpen(true); }}
+              className="absolute top-8 right-8 text-gray-300 hover:text-brand-orange transition-colors cursor-pointer"
+              title="Configurar Google Sheets"
+            >
+              <Settings size={20} />
+            </button>
+
+            {success ? (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="py-16 text-center space-y-8"
+              >
+                <div className="w-24 h-24 bg-brand-orange-light rounded-full flex items-center justify-center mx-auto text-brand-orange">
+                  <CheckCircle2 size={48} />
                 </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-gray ml-2">WhatsApp</label>
-                  <input type="tel" placeholder="+34 000 000 000" className="w-full bg-[#F5F5F7] border-0 rounded-2xl p-6 text-brand-dark focus:ring-2 focus:ring-brand-orange outline-none transition-all placeholder:text-gray-300 font-medium" />
+                <div>
+                  <h3 className="text-3xl font-black text-brand-dark mb-4">¡Petición Recibida!</h3>
+                  <p className="text-brand-gray leading-relaxed max-w-sm mx-auto">
+                    Me pondré en contacto contigo directamente por WhatsApp para concretar fecha y hora para tu diagnóstico.
+                  </p>
                 </div>
-              </div>
-              <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-gray ml-2">Tu principal preocupación</label>
-                <div className="relative">
-                  <select className="w-full bg-[#F5F5F7] border-0 rounded-2xl p-6 text-brand-dark focus:ring-2 focus:ring-brand-orange outline-none transition-all appearance-none cursor-pointer font-medium">
-                    <option>Diagnóstico Integral (Recomendado)</option>
-                    <option>Protección Familia y Vivienda</option>
-                    <option>Estrategia para Autónomos</option>
-                    <option>Ahorro e Inversión</option>
-                  </select>
-                  <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-20">
-                    <ChevronDown size={20} />
+                {!sheetUrl && (
+                  <p className="text-[10px] text-gray-400 font-bold max-w-xs mx-auto">
+                    ℹ️ Lead guardado localmente en pruebas. Pulsa la tuerca de arriba a la derecha para conectarlo con Google Sheets.
+                  </p>
+                )}
+                <button 
+                  onClick={() => setSuccess(false)}
+                  className="px-10 py-4 bg-brand-dark hover:bg-brand-orange transition-colors text-white font-black text-[10px] uppercase tracking-widest rounded-full"
+                >
+                  Nuevo diagnóstico
+                </button>
+              </motion.div>
+            ) : (
+              <form className="space-y-10" onSubmit={handleSubmit}>
+                <div className="grid md:grid-cols-2 gap-10">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-gray ml-2">Nombre Completo</label>
+                    <input 
+                      type="text" 
+                      required
+                      value={formData.nombre}
+                      onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                      placeholder="Ej. Juan Pérez" 
+                      className="w-full bg-[#F5F5F7] border-0 rounded-2xl p-6 text-brand-dark focus:ring-2 focus:ring-brand-orange outline-none transition-all placeholder:text-gray-300 font-medium" 
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-gray ml-2">WhatsApp</label>
+                    <input 
+                      type="tel" 
+                      required
+                      value={formData.whatsapp}
+                      onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                      placeholder="+34 600 000 000" 
+                      className="w-full bg-[#F5F5F7] border-0 rounded-2xl p-6 text-brand-dark focus:ring-2 focus:ring-brand-orange outline-none transition-all placeholder:text-gray-300 font-medium" 
+                    />
                   </div>
                 </div>
-              </div>
-              <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-gray ml-2">Mensaje (Opcional)</label>
-                <textarea rows={3} placeholder="Cuéntame brevemente tu caso..." className="w-full bg-[#F5F5F7] border-0 rounded-3xl p-6 text-brand-dark focus:ring-2 focus:ring-brand-orange outline-none transition-all placeholder:text-gray-300 resize-none font-medium"></textarea>
-              </div>
-              <motion.button 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 350, damping: 15 }}
-                className="w-full py-8 bg-brand-dark text-white rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:bg-brand-orange transition-all duration-300 cursor-pointer"
-              >
-                Solicitar Diagnóstico
-              </motion.button>
-              <div className="flex items-center justify-center gap-2 grayscale opacity-30 mt-4 font-black text-[9px] uppercase tracking-widest">
-                <div className="w-1.5 h-1.5 rounded-full bg-brand-dark"></div>
-                <span>Privacidad Asegurada</span>
-              </div>
-            </form>
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-gray ml-2">Tu principal preocupación</label>
+                  <div className="relative">
+                    <select 
+                      value={formData.preocupacion}
+                      onChange={(e) => setFormData({ ...formData, preocupacion: e.target.value })}
+                      className="w-full bg-[#F5F5F7] border-0 rounded-2xl p-6 text-brand-dark focus:ring-2 focus:ring-brand-orange outline-none transition-all appearance-none cursor-pointer font-medium"
+                    >
+                      <option>Diagnóstico Integral (Recomendado)</option>
+                      <option>Protección Familia y Vivienda</option>
+                      <option>Estrategia para Autónomos</option>
+                      <option>Ahorro e Inversión</option>
+                    </select>
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-20">
+                      <ChevronDown size={20} />
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-gray ml-2">Mensaje (Opcional)</label>
+                  <textarea 
+                    rows={3} 
+                    value={formData.mensaje}
+                    onChange={(e) => setFormData({ ...formData, mensaje: e.target.value })}
+                    placeholder="Cuéntame brevemente tu caso..." 
+                    className="w-full bg-[#F5F5F7] border-0 rounded-3xl p-6 text-brand-dark focus:ring-2 focus:ring-brand-orange outline-none transition-all placeholder:text-gray-300 resize-none font-medium"
+                  ></textarea>
+                </div>
+
+                {errorMsg && (
+                  <p className="text-red-500 font-bold text-xs ml-2">{errorMsg}</p>
+                )}
+
+                <motion.button 
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 15 }}
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full py-8 bg-brand-dark text-white rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:bg-brand-orange transition-all duration-300 cursor-pointer disabled:opacity-50"
+                >
+                  {submitting ? "Enviando..." : "Solicitar Diagnóstico"}
+                </motion.button>
+                <div className="flex items-center justify-center gap-2 grayscale opacity-30 mt-4 font-black text-[9px] uppercase tracking-widest">
+                  <div className="w-1.5 h-1.5 rounded-full bg-brand-dark"></div>
+                  <span>Privacidad Asegurada</span>
+                </div>
+              </form>
+            )}
           </motion.div>
         </div>
       </div>
+
+      {/* Elegant Configuration Drawer/Modal for Google Sheets Webhooks */}
+      <AnimatePresence>
+        {configOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-6"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="bg-brand-dark border border-white/10 w-full max-w-2xl rounded-3xl p-8 md:p-12 relative text-white max-h-[90vh] overflow-y-auto"
+            >
+              <button 
+                onClick={() => setConfigOpen(false)}
+                className="absolute top-6 right-6 text-gray-400 hover:text-white cursor-pointer"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-brand-orange/10 flex items-center justify-center text-brand-orange">
+                  <Settings size={24} />
+                </div>
+                <h3 className="text-2xl font-black uppercase tracking-wider">Conectar Google Sheets</h3>
+              </div>
+
+              <div className="space-y-6 text-sm text-gray-300 font-light mb-8">
+                <p>
+                  Sigue estos pasos gratuitos para vincular el formulario directamente con una hoja de cálculo en tiempo real:
+                </p>
+                
+                <ol className="list-decimal pl-6 space-y-2 text-xs">
+                  <li>Crea una <strong>Hoja de Cálculo</strong> de Google vacía.</li>
+                  <li>Ve a <strong>Extensiones &gt; Apps Script</strong>.</li>
+                  <li>Borra el código que aparezca y pega el siguiente script:</li>
+                </ol>
+
+                <div className="bg-black p-4 rounded-xl font-mono text-[11px] overflow-x-auto text-lime-400 max-h-40 overflow-y-auto">
+{`function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data = JSON.parse(e.postData.contents);
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Fecha", "Nombre", "WhatsApp", "Preocupacion", "Mensaje"]);
+    }
+    sheet.appendRow([new Date(), data.nombre, data.whatsapp, data.preocupacion, data.mensaje]);
+    return ContentService.createTextOutput(JSON.stringify({"status":"success"}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(error) {
+    return ContentService.createTextOutput(JSON.stringify({"status":"error", "message": error.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}`}
+                </div>
+
+                <ol className="list-decimal pl-6 space-y-2 text-xs" start={4}>
+                  <li>Haz clic en <strong>Implementar &gt; Nueva implementación</strong>.</li>
+                  <li>Selecciona tipo: <strong>Aplicación web</strong>. Ejecutar como: <strong>Tú</strong>, Quién tiene acceso: <strong>Cualquiera</strong>.</li>
+                  <li>Copia el <strong>URL de la Aplicación web</strong> devuelta y pégalo abajo:</li>
+                </ol>
+              </div>
+
+              <form onSubmit={handleSaveConfig} className="space-y-6">
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">URL del Webhook de Apps Script</label>
+                  <input 
+                    type="url" 
+                    value={tempUrl}
+                    onChange={(e) => setTempUrl(e.target.value)}
+                    placeholder="https://script.google.com/macros/s/.../exec"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl p-5 text-white outline-none focus:border-brand-orange text-xs font-mono"
+                    required
+                  />
+                </div>
+                
+                <div className="flex gap-4 pt-4">
+                  <button 
+                    type="button"
+                    onClick={() => { localStorage.removeItem("google_sheets_url"); setSheetUrl(""); setTempUrl(""); setConfigOpen(false); }}
+                    className="flex-1 py-4 bg-red-600/10 border border-red-500/20 hover:bg-red-600 hover:text-white transition-colors uppercase font-black tracking-widest text-[10px] rounded-full"
+                  >
+                    Desconectar
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 py-4 bg-brand-orange text-white uppercase font-black tracking-widest text-[10px] rounded-full hover:bg-brand-orange-light hover:text-brand-dark transition-colors"
+                  >
+                    Guardar Webhook
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
@@ -827,8 +1094,8 @@ const FAQ = () => {
       <div className="max-w-4xl mx-auto px-6">
         <div className="text-center mb-24">
           <span className="text-brand-orange font-black uppercase tracking-[0.4em] text-[10px] mb-6 inline-block">Resolviendo Dudas</span>
-          <h2 className="text-4xl md:text-6xl font-serif tracking-tight text-brand-dark italic">
-            Preguntas <span className="text-brand-orange not-italic">Frecuentes</span>
+          <h2 className="text-4xl md:text-6xl font-serif tracking-tight text-brand-dark italic font-light">
+            Preguntas <span className="text-brand-orange not-italic font-normal">frecuentes.</span>
           </h2>
         </div>
         <div className="border-t border-gray-100">
@@ -865,7 +1132,9 @@ const AboutMe = () => {
           </div>
           <div>
             <span className="text-brand-orange font-black uppercase tracking-[0.3em] text-sm mb-6 inline-block">Consultoría con Valores</span>
-            <h2 className="text-4xl md:text-6xl font-serif mb-10 leading-[1.08] tracking-tight">Humanizando las <br/><span className="text-brand-orange italic">decisiones financieras</span></h2>
+            <h2 className="text-4xl md:text-6xl font-serif mb-10 leading-[1.08] tracking-tight italic font-light text-brand-dark">
+              Humanizando las <br/><span className="text-brand-orange not-italic font-normal">decisiones financieras.</span>
+            </h2>
             <p className="text-brand-gray text-2xl mb-8 leading-relaxed font-light">
               Mi enfoque es sencillo: antes de recomendar una solución, hay que entender bien el alma de cada situación.
             </p>
@@ -916,9 +1185,9 @@ const FinalCTA = () => {
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 45, damping: 15 }}
           >
-            <h2 className="text-6xl md:text-9xl font-serif mb-16 leading-[0.88] tracking-tighter">
-              <CurtainText delay={0.05} className="text-center w-full">El control</CurtainText>
-              <span className="text-brand-orange italic font-light whitespace-nowrap block mt-2">es el nuevo lujo</span>
+            <h2 className="text-6xl md:text-8xl font-serif mb-16 leading-[0.98] tracking-tight text-center">
+              <CurtainText delay={0.05} className="text-center w-full text-white italic font-light">El control</CurtainText>
+              <span className="text-brand-orange not-italic font-normal block mt-2">es el nuevo lujo.</span>
             </h2>
             <p className="text-gray-400 text-xl md:text-3xl mb-20 max-w-3xl mx-auto leading-relaxed font-light">
               Toma hoy la decisión que definirá la tranquilidad de tu familia en los próximos 20 años.
@@ -937,7 +1206,7 @@ const FinalCTA = () => {
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 350, damping: 16 }}
-                href="https://wa.me/34600000000" 
+                href="https://wa.me/34647506040" 
                 target="_blank" 
                 className="w-full sm:w-auto bg-white/5 backdrop-blur-xl text-white border border-white/10 px-16 py-8 rounded-full font-black text-xs hover:bg-white/10 transition-all flex items-center justify-center gap-4 uppercase tracking-[0.4em] text-center"
                >
@@ -970,7 +1239,9 @@ const Footer = () => {
                     key={i} 
                     whileHover={{ scale: 1.08, backgroundColor: "#FF6600", borderColor: "#FF6600", color: "#ffffff" }}
                     transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                    href="#" 
+                    href={i === 0 ? "mailto:josecarlos@hilolegal.es" : "https://wa.me/34647506040"} 
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-14 h-14 border border-white/10 rounded-2xl flex items-center justify-center text-white bg-white/5"
                   >
                     <Icon size={24} />
