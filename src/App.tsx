@@ -327,7 +327,7 @@ const Hero = () => {
         
         <div className="relative">
           <CurtainImageReveal 
-            src="/input_file_0.png" 
+            src="/1.png" 
             alt="Asesor Financiero" 
             className="aspect-[4/5] bg-white rounded-[2.5rem] relative border border-gray-100 shadow-[0_32px_64px_rgba(0,0,0,0.06)] hover:shadow-[0_45px_80px_rgba(0,0,0,0.1)] transition-shadow duration-700" 
             delay={0.25}
@@ -405,7 +405,7 @@ const ProblemSection = () => {
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <div className="relative">
             <CurtainImageReveal 
-              src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=1000" 
+              src="/2.png" 
               alt="Finanzas y preocupaciones" 
               className="aspect-square rounded-[3.5rem] shadow-[0_25px_60px_rgba(0,0,0,0.06)] overflow-hidden" 
               delay={0.1}
@@ -612,7 +612,7 @@ const Audiences = () => {
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
           <div className="relative">
              <CurtainImageReveal 
-               src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=800" 
+               src="/3.png" 
                alt="Autónomos" 
                className="rounded-[3rem] shadow-[0_45px_90px_rgba(0,0,0,0.06)] overflow-hidden"
                delay={0.1}
@@ -700,7 +700,7 @@ const Audiences = () => {
           </div>
           <div className="relative">
             <CurtainImageReveal 
-              src="https://images.unsplash.com/photo-1543332164-6e82f355badc?auto=format&fit=crop&q=80&w=800" 
+              src="/4.png" 
               alt="Familia" 
               className="rounded-[3rem] shadow-2xl overflow-hidden relative"
               delay={0.15}
@@ -856,7 +856,7 @@ const AboutMe = () => {
                   className="absolute -inset-4 bg-brand-orange rounded-[3rem] -z-10 opacity-10"
                 ></motion.div>
                 <CurtainImageReveal 
-                  src="https://images.unsplash.com/photo-1542744173-8e0ee26dfaf5?auto=format&fit=crop&q=80&w=800" 
+                  src="/5.png" 
                   alt="Consultoría financiera especializada" 
                   className="rounded-[3rem] w-full relative z-10 shadow-2xl" 
                   delay={0.1}
@@ -901,6 +901,10 @@ const AboutMe = () => {
 const FinalCTA = () => {
   return (
     <section className="py-40 bg-brand-dark text-white relative overflow-hidden">
+       {/* Background Image /6.png with dark premium overlay */}
+       <div className="absolute inset-0 z-0 opacity-15 mix-blend-overlay pointer-events-none">
+         <img src="/6.png" className="w-full h-full object-cover" alt="Contacto" referrerPolicy="no-referrer" />
+       </div>
        {/* High-end glow lights */}
        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-orange/6 blur-[150px] rounded-full translate-x-1/3 -translate-y-1/2 pointer-events-none"></div>
        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-orange/4 blur-[120px] rounded-full -translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
